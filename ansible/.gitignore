@@ -1,0 +1,6 @@
+*.pem
+*.pub
+*.tfstate
+*.tfstate.*
+.terraform/
+logs/
