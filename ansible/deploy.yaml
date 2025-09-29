@@ -1,0 +1,43 @@
+---
+# Deploy to AWS
+- name: Deploy AWS content
+  hosts: aws
+  become: true
+  tasks:
+    - apt: { name: nginx, state: present, update_cache: yes }
+    - service: { name: nginx, enabled: yes, state: started }
+
+    - name: Copy AWS page to both index files
+      copy:
+        src: "{{ playbook_dir }}/../index-aws.html"
+        dest: "{{ item }}"
+        owner: root
+        group: root
+        mode: "0644"
+      loop:
+        - /var/www/html/index.html
+        - /var/www/html/index.nginx-debian.html
+
+    - service: { name: nginx, state: reloaded }
+
+# Deploy to Azure
+- name: Deploy Azure content
+  hosts: azure
+  become: true
+  tasks:
+    - apt: { name: nginx, state: present, update_cache: yes }
+    - service: { name: nginx, enabled: yes, state: started }
+
+    - name: Copy Azure page to both index files
+      copy:
+        src: "{{ playbook_dir }}/../index-azure.html"
+        dest: "{{ item }}"
+        owner: root
+        group: root
+        mode: "0644"
+      loop:
+        - /var/www/html/index.html
+        - /var/www/html/index.nginx-debian.html
+
+    - service: { name: nginx, state: reloaded }
+
